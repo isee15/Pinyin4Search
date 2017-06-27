@@ -1,5 +1,9 @@
 package cn.z.test;
 
+import java.io.Console;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import cn.z.PinyinUtil;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
@@ -26,6 +30,14 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
+		String name = "zhongguo";
+		String key = "gu";
+		List<Integer> m = PinyinUtil.matchOrPinyinMatch(name, key);
+		System.out.println(name + " " + key + " " + " ret:" + m.stream().map(i->i.toString()).collect(Collectors.joining(",")));
+		name = "aaa中guo";
+		key = "zu";
+		m = PinyinUtil.matchOrPinyinMatch(name, key);
+		System.out.println(name + " " + key + " " + " ret:" + m.stream().map(i->i.toString()).collect(Collectors.joining(",")));
 		int start = 0x4e00;
 		int end = 0x9fa5;
 		String cc = null;
@@ -55,7 +67,7 @@ public class Main {
 		
 		for (int i = start; i <= end; i++) {
 			dd = PinyinUtil.toHanyupinyin((char) i);
-			if (dd.length() == 0) {
+			if (dd.equals(String.valueOf((char)i))) {
 				String[] j4 = PinyinHelper.toHanyuPinyinStringArray((char) i);
 				String j4s = j4 == null ? "" : String.join(",", PinyinHelper.toHanyuPinyinStringArray((char) i));
 				System.out.println(
