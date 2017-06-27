@@ -4,6 +4,10 @@
 
 ## Java
 ```
+//返回常用的一个读音，不带声调
 public static String toHanyupinyin(char c)
+//返回所有读音，带声调
 public static List<String> getAllPinyin(char c)
+//搜索匹配，返回匹配到的索引，用于高亮显示
+public static List<Integer> matchOrPinyinMatch(String str, String searchKey)
 ```
