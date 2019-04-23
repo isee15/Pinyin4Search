@@ -30,10 +30,15 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		String name = "zhongguo";
-		String key = "gu";
-		List<Integer> m = PinyinUtil.matchOrPinyinMatch(name, key);
+		String oriString = "拈朵微笑的花";
+		String result = PinyinUtil.toHanyupinyin(oriString);
+		System.out.println(oriString + ":" + result);
+		
+		String name = "拈朵微笑的花";
+		String key = "weix";
+		List<Integer> m = PinyinUtil.matchOrPinyinMatch("拈朵微笑的花", "weix");
 		System.out.println(name + " " + key + " " + " ret:" + m.stream().map(i->i.toString()).collect(Collectors.joining(",")));
+		System.out.println(PinyinUtil.hilightSearch("拈朵微笑的花", "weix"));
 		name = "aaa中guo";
 		key = "zu";
 		m = PinyinUtil.matchOrPinyinMatch(name, key);

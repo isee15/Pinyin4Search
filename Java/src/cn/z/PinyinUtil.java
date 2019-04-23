@@ -63,6 +63,30 @@ public class PinyinUtil {
 		}
 		return String.valueOf(c);
 	}
+	
+	/**
+	 * 
+	 * @param str
+	 * @return 汉字转拼音
+	 */
+	public static String toHanyupinyin(String str) {
+	    if (str == null) {
+	    	return "";
+	    }
+	    StringBuilder sb = new StringBuilder();
+	    char[] arr = str.toCharArray();
+	    boolean isFirst = true;
+		for(char c : arr) {
+			if (isFirst){
+				isFirst = false;
+			}
+			else {
+				sb.append(" ");
+			}
+			sb.append(toHanyupinyin(c));
+		}
+		return sb.toString();
+	}
 
 	/**
 	 * 
@@ -140,4 +164,19 @@ public class PinyinUtil {
 
 		return new ArrayList<Integer>();
 	}
+	
+	public static String hilightSearch(String str, String searchKey) {
+		StringBuilder sb = new StringBuilder();
+		List<Integer> m = matchOrPinyinMatch(str,searchKey);
+		for(int i = 0; i < str.length(); i++) {
+			if (m.contains(i)) {
+				sb.append("<em>"+str.charAt(i)+"</em>");
+			}
+			else {
+				sb.append(str.charAt(i));
+			}
+		}
+        return sb.toString();
+    }
+
 }
