@@ -10,11 +10,11 @@ import java.util.Map;
 import java.util.Properties;
 
 public class PinyinUtil {
-	private static Map<Character, List<Integer>> charMap;
-	private static Map<Integer, String> pinyinMap;
+	private static final Map<Character, List<Integer>> charMap;
+	private static final Map<Integer, String> pinyinMap;
 
 	static {
-		charMap = new HashMap<Character, List<Integer>>();
+		charMap = new HashMap<>();
 		try {
 			Properties charProp = new Properties();
 			charProp.load(new FileInputStream("data/pinyinmap.properties"));
@@ -23,7 +23,7 @@ public class PinyinUtil {
 				String key = (String) e.nextElement();
 				String indexStr = charProp.getProperty(key);
 				String[] indexArr = indexStr.split(",");
-				List<Integer> indexs = new ArrayList<Integer>();
+				List<Integer> indexs = new ArrayList<>();
 				for (String index : indexArr) {
 					indexs.add(Integer.parseInt(index));
 				}
@@ -33,7 +33,7 @@ public class PinyinUtil {
 			e.printStackTrace();
 		}
 
-		pinyinMap = new HashMap<Integer, String>();
+		pinyinMap = new HashMap<>();
 
 		try {
 			Properties indexProp = new Properties();
@@ -95,7 +95,7 @@ public class PinyinUtil {
 	 */
 	public static List<String> getAllPinyin(char c) {
 		List<Integer> indexs = charMap.get(c);
-		List<String> pys = new ArrayList<String>();
+		List<String> pys = new ArrayList<>();
 		if (indexs != null) {
 			for (Integer index : indexs) {
 				String py = pinyinMap.get(index);
@@ -108,20 +108,25 @@ public class PinyinUtil {
 
 	private static List<Integer> match(final String str, final String key) {
 		System.out.println("matching: " + str + " " + key);
-		if (key.length() == 0)
-			new ArrayList<Integer>();
-		List<Integer> matchIndex = new ArrayList<Integer>();
+		if (key.length() == 0) {
+			return new ArrayList<>();
+		}
+		List<Integer> matchAllIndex = new ArrayList<>();
+		List<Integer> matchIndex = new ArrayList<>();
 		int j = 0;
 		for (int i = 0; i < str.length() && j < key.length(); i++) {
 			if (key.charAt(j) == str.charAt(i)) {
 				matchIndex.add(i);
 				j++;
 			}
+			if (j == key.length()) {
+				matchAllIndex.addAll(matchIndex);
+				matchIndex = new ArrayList<>();
+				j = 0;
+			}
 		}
-		if (j == key.length()) {
-			return matchIndex;
-		}
-		return new ArrayList<Integer>();
+
+		return matchAllIndex;
 	}
 
 	/**
@@ -137,7 +142,7 @@ public class PinyinUtil {
 		if (ret.size() > 0) {
 			return ret;
 		}
-		List<Integer> pyIndex = new ArrayList<Integer>();
+		List<Integer> pyIndex = new ArrayList<>();
 		int startIndex = 0;
 		StringBuilder pyStr = new StringBuilder();
 		for (int i = 0; i < name.length(); i++) {
@@ -151,9 +156,9 @@ public class PinyinUtil {
 
 		ret = match(pyStr.toString(), key);
 		if (ret.size() > 0) {
-			List<Integer> pyRet = new ArrayList<Integer>();
+			List<Integer> pyRet = new ArrayList<>();
 			for (Integer index : ret) {
-				Integer oriIndex = pyIndex.get(index.intValue());
+				Integer oriIndex = pyIndex.get(index);
 				if (!pyRet.contains(oriIndex)) {
 					pyRet.add(oriIndex);
 				}
@@ -162,7 +167,7 @@ public class PinyinUtil {
 			return pyRet;
 		}
 
-		return new ArrayList<Integer>();
+		return new ArrayList<>();
 	}
 	
 	public static String hilightSearch(String str, String searchKey) {
@@ -170,7 +175,7 @@ public class PinyinUtil {
 		List<Integer> m = matchOrPinyinMatch(str,searchKey);
 		for(int i = 0; i < str.length(); i++) {
 			if (m.contains(i)) {
-				sb.append("<em>"+str.charAt(i)+"</em>");
+				sb.append("<em>").append(str.charAt(i)).append("</em>");
 			}
 			else {
 				sb.append(str.charAt(i));
